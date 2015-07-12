@@ -1,19 +1,21 @@
 body{
   background-color: black;
 
+
+
   .bottom-information{
     text-color: #9393AF;
     font-size: 18px;
   }
   .scramble{
+
+
     margin-top: 200px;
     margin-bottom: 200px;
 
     .word{
       margin-top: 20px;
       margin-left: 600px;
-      height: 200px;
-      background-color: red;
 
       .letter{
         float: left;
@@ -22,6 +24,17 @@ body{
         width: 50px;
         margin: 10px;
         font-size: 40px;
+      }
+      .correct{
+        text-color: #EBEBE0;
+        background-color: #3D3D29;
+      }
+      .incorrect{
+        text-color: #520000;
+      }
+      .neutral{
+        background-color: black;
+        text-color: #9393AF;
       }
       .used{
         background-color: #4C4C33;

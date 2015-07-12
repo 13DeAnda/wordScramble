@@ -1,17 +1,18 @@
 <div class="scramble">
-  <div class="word text-center row">
-    <div  ng-repeat="letter in userWord track by $index" class="letter letter.color">
-      {{letter }}
+  <div class="transiton">
+    <div class="word text-center row">
+      <div  ng-repeat="letter in userWord track by $index" class="letter {{tansitionColor}}">
+        {{letter }}
+      </div>
+      <div  ng-repeat="letter in letters" class="letter {{letter.color}}" ng-hide="letter.used">
+        {{letter.letter }}
+      </div>
     </div>
-    <div  ng-repeat="letter in letters" class="letter {{letter.color}}" ng-hide="letter.used">
-      {{letter.letter }}
+
+    <div class="bottom text-center row">
+      {{message}}<br>
+      |  time left:{{timer}} | score: {{score}} | correct words: {{correct}} |
     </div>
   </div>
-
-  <div class="bottom text-center row">
-    {{message}}<br>
-    |  time left:{{timer}} | score: {{score}} | correct words: {{correct}} |
-  </div>
-
 
 </div>
