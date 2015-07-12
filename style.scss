@@ -1,0 +1,41 @@
+body{
+  background-color: black;
+
+  .bottom-information{
+    text-color: #9393AF;
+    font-size: 18px;
+  }
+  .scramble{
+    margin-top: 200px;
+    margin-bottom: 200px;
+
+    .word{
+      margin-top: 20px;
+      margin-left: 600px;
+      height: 200px;
+      background-color: red;
+
+      .letter{
+        float: left;
+        display: inline;
+        height: 50px;
+        width: 50px;
+        margin: 10px;
+        font-size: 40px;
+      }
+      .used{
+        background-color: #4C4C33;
+        text-color: #0F0F0A;
+      }
+      .unused{
+        background-color: white;
+        text-color: #2E2E1F;
+      }
+    }
+    .bottom{
+      text-color:#990000;
+      font-size: 20px;
+    }
+  }
+}
+
