@@ -1,6 +1,7 @@
-var app = angular.module('ws', []);
-app.controller('', [ '$scope',
+var app = angular.module('WordScramble', []);
+app.controller('WordScamble.controller', [ '$scope',
     function ($scope) {
+
     }
 ]);
 
@@ -10,25 +11,23 @@ app.directive('scramble', function () {
       scope.getWord();
       scope.setTimer();
     }
-    function controller($scope, $timeout, $http) {
+    function controller($scope, $timeout) {
       $scope.tansitionColor = "neutral";
       $scope.shuffledWord = "";
       $scope.userWord = ""; //what the user types
       $scope.usedLetters = [];
-      $scope.timer = 100;
+      $scope.gameTime = 100;
       $scope.score = 0;
       $scope.correct = 0;
-
-
-      $scope.getWord = function(){
-        var path = "http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=adverb&excludePartOfSpeech=verb&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=8&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5";
-        $http.get(path).then($scope.onGetWord);
-      };
 
       $scope.onGetWord = function(response){
         $scope.tansitionColor = "neutral";
         $scope.retrivedWord = response.data.word.toLowerCase();
         $scope.makeWordObject();
+      };
+      $scope.getWord = function(){
+        var path = "http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=adverb&excludePartOfSpeech=verb&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=8&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5";
+        $http.get(path).then($scope.onGetWord);
       };
 
       $scope.makeWordObject = function(){
@@ -45,20 +44,20 @@ app.directive('scramble', function () {
       };
 
       $scope.setTimer = function(){
-        $scope.mytimeout = $timeout($scope.onTimeout, 1000);
+        $scope.timer = $timeout($scope.onTimer, 1000);
       };
 
-      $scope.onTimeout = function() {
-        if($scope.timer ===  0) {
-            $timeout.cancel(mytimeout);
+      $scope.onTimer = function() {
+        if($scope.gameTime ===  0) {
+            $timeout.cancel(timer);
             $scope.userWord = "";
             $scope.letters = [];
             $scope.message = "";
             alert("time is up, your score: " +$scope.score);
             return;
         }
-        $scope.timer--;
-        mytimeout = $timeout($scope.onTimeout, 1000);
+        $scope.gameTime--;
+        timer = $timeout($scope.onTimer, 1000);
       };
 
       //when wrong answer
@@ -73,8 +72,6 @@ app.directive('scramble', function () {
       };
       //when right answer
       $scope.onTransitionRightTimeout = function(){
-        $scope.score += 5;
-        $scope.correct++;
         $scope.tansitionColor = "neutral";
         $scope.userWord = "";
         $scope.message = "";
@@ -137,6 +134,8 @@ app.directive('scramble', function () {
           if($scope.retrivedWord === $scope.userWord || reverse === $scope.userWord){
             $scope.message = "correct";
             $scope.tansitionColor = "correct";
+            $scope.score += 5;
+            $scope.correct++;
             $scope.transitionTimeout = $timeout($scope.onTransitionRightTimeout, 3000);
           }
           //wrong
@@ -147,14 +146,16 @@ app.directive('scramble', function () {
           }
         }
       };
-
-
     }
     return {
         restrict: 'E',
+        replace: true,
+        transclude: false,
+        controller: controller,
         templateUrl:"scramble.html",
-        scope: {},
+        scope: {
+        },
         link: linkingFunction,
-        controller: controller
+
     };
 });

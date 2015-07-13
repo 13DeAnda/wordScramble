@@ -8,10 +8,12 @@ body{
   .scramble{
     margin-top: 200px;
     margin-bottom: 200px;
+    text-align: center;
 
     .word{
       margin-top: 20px;
-      margin-left: 450px;
+      display: inline-block;
+
       .letter{
         float: left;
         display: inline;
