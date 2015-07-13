@@ -1,22 +1,17 @@
 body{
   background-color: black;
 
-
-
   .bottom-information{
-    text-color: #9393AF;
+    color: #2E2E1F;
     font-size: 18px;
   }
   .scramble{
-
-
     margin-top: 200px;
     margin-bottom: 200px;
 
     .word{
       margin-top: 20px;
-      margin-left: 600px;
-
+      margin-left: 450px;
       .letter{
         float: left;
         display: inline;
@@ -26,27 +21,23 @@ body{
         font-size: 40px;
       }
       .correct{
-        text-color: #EBEBE0;
-        background-color: #3D3D29;
+        color: #3D5200;
       }
       .incorrect{
-        text-color: #520000;
+        color: red;
       }
       .neutral{
-        background-color: black;
-        text-color: #9393AF;
+        color: #2E2E1F;
       }
       .used{
-        background-color: #4C4C33;
-        text-color: #0F0F0A;
+        color: #2E2E1F;
       }
       .unused{
         background-color: white;
-        text-color: #2E2E1F;
+        color:  #2E2E1F;
       }
     }
     .bottom{
-      text-color:#990000;
       font-size: 20px;
     }
   }
