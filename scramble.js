@@ -11,23 +11,25 @@ app.directive('scramble', function () {
       scope.getWord();
       scope.setTimer();
     }
-    function controller($scope, $timeout) {
+    function controller($scope, $timeout, $http) {
       $scope.tansitionColor = "neutral";
       $scope.shuffledWord = "";
       $scope.userWord = ""; //what the user types
       $scope.usedLetters = [];
-      $scope.gameTime = 100;
+      $scope.timerTime = 100;
       $scope.score = 0;
       $scope.correct = 0;
+
+      $scope.getWord = function(){
+        $scope.gameOver = false;
+        var path = "http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=adverb&excludePartOfSpeech=verb&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=8&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5";
+        $http.get(path).then($scope.onGetWord);
+      };
 
       $scope.onGetWord = function(response){
         $scope.tansitionColor = "neutral";
         $scope.retrivedWord = response.data.word.toLowerCase();
         $scope.makeWordObject();
-      };
-      $scope.getWord = function(){
-        var path = "http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=adverb&excludePartOfSpeech=verb&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=8&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5";
-        $http.get(path).then($scope.onGetWord);
       };
 
       $scope.makeWordObject = function(){
@@ -48,20 +50,26 @@ app.directive('scramble', function () {
       };
 
       $scope.onTimer = function() {
-        if($scope.gameTime ===  0) {
+        if($scope.timerTime ===  0) {
             $timeout.cancel(timer);
             $scope.userWord = "";
             $scope.letters = [];
             $scope.message = "";
+            $scope.gameOver = true;
             alert("time is up, your score: " +$scope.score);
             return;
         }
-        $scope.gameTime--;
+        $scope.timerTime--;
         timer = $timeout($scope.onTimer, 1000);
       };
 
+      $scope.newGame = function(){
+        $scope.getWord();
+        $scope.timerTime = 100;
+        $scope.setTimer();
+      };
       //when wrong answer
-      $scope.onTransitionWrongTimeout = function(){
+      $scope.wrong = function(){
         $scope.tansitionColor = "neutral";
         $scope.userWord = "";
         $scope.message = "";
@@ -71,7 +79,9 @@ app.directive('scramble', function () {
         }
       };
       //when right answer
-      $scope.onTransitionRightTimeout = function(){
+      $scope.right = function(){
+        $scope.score += 5;
+        $scope.correct++;
         $scope.tansitionColor = "neutral";
         $scope.userWord = "";
         $scope.message = "";
@@ -88,6 +98,8 @@ app.directive('scramble', function () {
         }
         return parts.join('');
       };
+      //checks if it is a
+
       //catches what the user is typing
       $scope.type = function(e){
         //if it's a backspace
@@ -134,28 +146,24 @@ app.directive('scramble', function () {
           if($scope.retrivedWord === $scope.userWord || reverse === $scope.userWord){
             $scope.message = "correct";
             $scope.tansitionColor = "correct";
-            $scope.score += 5;
-            $scope.correct++;
-            $scope.transitionTimeout = $timeout($scope.onTransitionRightTimeout, 3000);
+            $scope.transitionTimer = $timeout($scope.right, 3000);
           }
           //wrong
           else{
             $scope.tansitionColor = "incorrect";
             $scope.message = "incorrect";
-            $scope.transitionTimeout = $timeout($scope.onTransitionWrongTimeout, 3000);
+            $scope.transitionTimer = $timeout($scope.wrong, 3000);
           }
         }
       };
+
+
     }
     return {
         restrict: 'E',
-        replace: true,
-        transclude: false,
-        controller: controller,
         templateUrl:"scramble.html",
-        scope: {
-        },
+        scope: {},
         link: linkingFunction,
-
+        controller: controller
     };
 });
