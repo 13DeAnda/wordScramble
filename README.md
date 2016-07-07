@@ -1,5 +1,5 @@
 # wordScramble
-a simple word scramble game
+a simple word scramble game Using Angular
 
 
 to run the aplication
